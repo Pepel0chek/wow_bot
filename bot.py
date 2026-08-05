@@ -1,3 +1,4 @@
+import asyncio
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
@@ -26,10 +27,14 @@ async def confirm(update: Update, context):
         text=f"🛒 НОВЫЙ ЗАКАЗ!\nОт: @{user.username or user.first_name}\n💰 Оплата на {PHONE}"
     )
 
-app = Application.builder().token(TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("confirm", confirm))
-app.add_handler(CallbackQueryHandler(button))
+async def main():
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("confirm", confirm))
+    app.add_handler(CallbackQueryHandler(button))
+    
+    print("✅ БОТ ЗАПУЩЕН 24/7!")
+    await app.run_polling()
 
-print("✅ БОТ ЗАПУЩЕН 24/7!")
-app.run_polling()
+if __name__ == "__main__":
+    asyncio.run(main())
